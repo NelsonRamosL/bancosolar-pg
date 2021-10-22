@@ -17,7 +17,7 @@ INT, monto FLOAT, fecha TIMESTAMP, FOREIGN KEY (emisor) REFERENCES
 usuarios(id), FOREIGN KEY (receptor) REFERENCES usuarios(id));
 
 
-para poder listar las transferencias con los respectivos nombres de los usuarios realize un INNER JOIN y una sub consulta.
+para poder listar las transferencias con los respectivos nombres de los usuarios realise un INNER JOIN y una sub consulta.
 
 SELECT fecha,nombre,(SELECT nombre as nombrereceptor from usuarios WHERE usuarios.id=transferencias.receptor),monto FROM transferencias INNER JOIN usuarios ON transferencias.emisor= usuarios.id"
     
