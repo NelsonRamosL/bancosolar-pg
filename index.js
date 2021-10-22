@@ -1,7 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const url = require("url");
-const { guardarUsuario, getUsuarios, editarUsuario } = require("./bd/coneccion");
+const { guardarUsuario, getUsuarios, editarUsuario,eliminarUsuario,registroTransferencia,getTransferencias } = require("./bd/coneccion");
 
 http.createServer(async (req, res) => {
 
@@ -79,6 +79,8 @@ http.createServer(async (req, res) => {
         console.log("en editar usuario")
         req.on("end", async () => {
            const usuario = JSON.parse(body);
+           usuario.id = id; // agregar id a usuario 
+           console.log(usuario)
             try {
                 const result = await editarUsuario(usuario);
                 res.statusCode = 200;
@@ -98,11 +100,11 @@ http.createServer(async (req, res) => {
         try {
             console.log("en eliminar");
             let { id } = url.parse(req.url, true).query;
-            await eliminarCandidato(id);
-            res.end("candidato eliminado");
+            await eliminarUsuario(id);
+            res.end("Usuario eliminado");
         } catch (e) {
             res.statusCode = 500;
-            res.end("ocurrio un error en el servidor" + e);
+            res.end("ocurrio un error en el servidor eliminar usuario" + e);
         }
     }
 
@@ -110,6 +112,41 @@ http.createServer(async (req, res) => {
 
 
 
+
+    if (req.url == "/transferencia" && req.method == "POST") {
+        let body = "";
+        req.on("data", (chunk) => {
+            body = chunk.toString();
+        });
+        console.log("guardar transferencia")
+        req.on("end", async () => {
+            const transferencia = JSON.parse(body);
+
+            try {
+                const result = await registroTransferencia(transferencia);
+                res.statusCode = 201;
+                res.end(JSON.stringify(result));
+            } catch (e) {
+                console.log("error" + e)
+                res.statusCode = 500;
+                res.end("ocurrio un error" + e);
+            }
+        })
+    }
+
+
+
+
+
+    if (req.url == "/transferencias" && req.method == "GET") {
+        try {
+            const transferencias = await getTransferencias();
+            res.end(JSON.stringify(transferencias));
+        } catch (e) {
+            res.statusCode = 500;
+            res.end("ocurrio un error en el servidor" + e);
+        }
+    }
 
 
 

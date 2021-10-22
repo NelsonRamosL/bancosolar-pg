@@ -279,9 +279,9 @@
                 </td>
               </tr>
          `);
-
-      $("#emisor").append(`<option value="${c.nombre}">${c.nombre}</option>`);
-      $("#receptor").append(`<option value="${c.nombre}">${c.nombre}</option>`);
+// Se remplazo el value (nombre por id) para poder identificar al usuario..
+      $("#emisor").append(`<option value="${c.id}">${c.nombre}</option>`);
+      $("#receptor").append(`<option value="${c.id}">${c.nombre}</option>`);
     });
   };
 
